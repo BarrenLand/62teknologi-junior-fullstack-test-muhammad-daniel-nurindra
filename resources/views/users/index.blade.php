@@ -19,16 +19,16 @@
 @endif
 <table class="table table-bordered">
     <tr>
-        <th>No</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Roles</th>
-        <th width="280px">Action</th>
+        <th>@sortablelink('id')</th>
+        <th>@sortablelink('name')</th>
+        <th>@sortablelink('email')</th>
+        <th>@sortablelink('role')</th>
+        <th width="280px">action</th>
     </tr>
     
     @foreach ($data as $key => $user)
     <tr>
-        <td>{{ ++$i }}</td>
+        <td>{{ $user->id }}</td>
         <td>{{ $user->name }}</td>
         <td>{{ $user->email }}</td>
         <td>
@@ -53,4 +53,5 @@
     @endforeach
 </table>
 {!! $data->render() !!}
+
 @endsection

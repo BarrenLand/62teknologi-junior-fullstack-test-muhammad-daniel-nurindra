@@ -31,9 +31,10 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $data = User::orderBy('id','DESC')->paginate(5);
-        return view('users.index',compact('data'))
-            ->with('i', ($request->input('page', 1) - 1) * 5);
+        $data = User::sortable()->paginate(5);
+            
+        return view('users.index',compact('data'));
+            // ->with('i', ($request->input('page', 1) - 1) * 5);
     }
     
     /**
@@ -58,6 +59,7 @@ class UserController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
+            'phone' => 'required|numeric',
             'password' => 'required|minsame:confirm-password',
             'roles' => 'required'
         ]);
@@ -111,6 +113,7 @@ class UserController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email|unique:users,email,'.$id,
+            'phone' => 'required|numeric',
             'password' => 'same:confirm-password',
             'roles' => 'required'
         ]);

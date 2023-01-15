@@ -19,9 +19,9 @@
     @endif
     <table class="table table-bordered">
         <tr>
-            <th>No</th>
-            <th>Name</th>
-            <th>Details</th>
+            <th>@sortablelink('id')</th>
+            <th>@sortablelink('name')</th>
+            <th>Detail</th>
             <th>Phone</th>
             <th>Status</th>
             <th width="280px">Action</th>
