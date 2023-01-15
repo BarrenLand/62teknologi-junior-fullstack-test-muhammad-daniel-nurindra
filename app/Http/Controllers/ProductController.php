@@ -24,12 +24,28 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    // public function index()
+    // {
+    //     $products = Product::sortable()->paginate(5);
+    //     return view('products.index',compact('products'));
+    //         // ->with('i', (request()->input('page', 1) - 1) * 5);
+    // }
+
+    public function index(Request $request)
     {
-        $products = Product::sortable()->paginate(5);
-        return view('products.index',compact('products'));
-            // ->with('i', (request()->input('page', 1) - 1) * 5);
-    }
+        $products = Product::where([
+            ['name', '!=', Null],
+            [function ($query) use ($request) {
+                if (($s = $request->s)) {
+                    $query->orWhere('name', 'LIKE', '%' . $s . '%')
+                        ->orWhere('detail', 'LIKE', '%' . $s . '%')
+                        ->get();
+                }
+            }]
+        ])->paginate(6);
+
+        return view('products.index', compact('products'));
+    } 
     
     /**
      * Show the form for creating a new resource.

@@ -29,14 +29,29 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    // public function index(Request $request)
+    // {
+    //     $data = User::sortable()->paginate(5);
+            
+    //     return view('users.index',compact('data'));
+    //         // ->with('i', ($request->input('page', 1) - 1) * 5);
+    // }
+    
     public function index(Request $request)
     {
-        $data = User::sortable()->paginate(5);
-            
-        return view('users.index',compact('data'));
-            // ->with('i', ($request->input('page', 1) - 1) * 5);
-    }
-    
+        $data = User::where([
+            ['name', '!=', Null],
+            [function ($query) use ($request) {
+                if (($s = $request->s)) {
+                    $query->orWhere('name', 'LIKE', '%' . $s . '%')
+                        ->orWhere('email', 'LIKE', '%' . $s . '%')
+                        ->get();
+                }
+            }]
+        ])->paginate(6);
+
+        return view('users.index', compact('data'));
+    } 
     /**
      * Show the form for creating a new resource.
      *
@@ -60,7 +75,7 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'phone' => 'required|numeric',
-            'password' => 'required|minsame:confirm-password',
+            'password' => 'required|same:confirm-password',
             'roles' => 'required'
         ]);
     
